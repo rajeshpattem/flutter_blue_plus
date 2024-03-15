@@ -101,8 +101,6 @@ class _ScanScreenState extends State<ScanScreen> {
         prettyException(
             allDevices.join(","), "Completed Storing these Devices"),
         success: false);
-
-    await getSalesRepName();
   }
 
   Future onStopPressed() async {
@@ -177,54 +175,6 @@ class _ScanScreenState extends State<ScanScreen> {
           ),
         )
         .toList();
-  }
-
-  Future<String> getSalesRepName() async {
-    Snackbar.show(
-        ABC.b, prettyException("Fetching bearer token ", ""),
-        success: false);
-    Token token = await getBearerToken();
-    Snackbar.show(
-        ABC.b, prettyException("Fetched bearer token successfully ", ""),
-        success: false);
-    print(token);
-    final response = await http.get(
-      Uri.parse(
-          'https://dev1.wcms.mycase.medtronic.com/occ/v2/mdt_b2bsite_us/vendorApi/getSalesRep/0001109789'),
-      headers: <String, String>{
-        HttpHeaders.authorizationHeader: 'Bearer ' + token.access_token,
-        'vendorId': 'UH',
-        'version': '2',
-      },
-    );
-
-    Snackbar.show(
-        ABC.b, prettyException("The response is ", jsonEncode(response)),
-        success: false);
-
-    return "Hello";
-  }
-
-  Future<Token> getBearerToken() async {
-    print('getting bearertoken');
-    try {
-      http.Response bearerResponse = await http.post(
-        Uri.parse(
-            'https://dev1.wcms.mycase.medtronic.com/authorizationserver/oauth/token?client_id=MULESOFT_NON_PROD&client_secret=gS8ms63ks7ALWS1&grant_type=client_credentials&scope=extended'),
-      );
-      print('checking bearerResponse');
-      if (bearerResponse.statusCode == 200) {
-        return Token.fromJson(bearerResponse.body as Map<String, dynamic>);
-      } else {
-        // If the server did not return a 201 CREATED response,
-        // then throw an exception.
-        throw Exception('Failed to create Token.');
-      }
-    } catch (e) {
-      print('In exception');
-      print(e);
-      throw Exception('Failed to create Token.');
-    }
   }
 
   List<Widget> _buildScanResultTiles(BuildContext context) {
