@@ -6,6 +6,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:app_links/app_links.dart';
 
 import 'screens/bluetooth_off_screen.dart';
 import 'screens/scan_screen.dart';
@@ -27,6 +28,10 @@ class FlutterBlueApp extends StatefulWidget {
 }
 
 class _FlutterBlueAppState extends State<FlutterBlueApp> {
+
+  Uri? deeplinkUri;
+  late AppLinks _appLinks;
+  StreamSubscription<Uri>? _linkSubscription;
   BluetoothAdapterState _adapterState = BluetoothAdapterState.unknown;
 
   late StreamSubscription<BluetoothAdapterState> _adapterStateStateSubscription;
@@ -34,6 +39,7 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
   @override
   void initState() {
     super.initState();
+    initDeepLinks();
     _adapterStateStateSubscription = FlutterBluePlus.adapterState.listen((state) {
       _adapterState = state;
       if (mounted) {
@@ -42,6 +48,32 @@ class _FlutterBlueAppState extends State<FlutterBlueApp> {
     });
   }
 
+
+
+  Future<void> initDeepLinks() async {
+    _appLinks = AppLinks();
+
+    // Check initial link if app was in cold state (terminated)
+    final appLink = await _appLinks.getInitialAppLink();
+    if (appLink != null) {
+      print('DEEPLINK - getInitialAppLink: $appLink');
+      _updateViewLink(appLink);
+    }
+
+
+    // Handle link when app is in warm state (front or background)
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+      deeplinkUri = uri;
+      print('DEEPLINK - uriLinkStream: $uri');
+      print('DEEPLINK - Query ${uri.queryParameters}');
+      _updateViewLink(uri);
+    });
+  }
+  void _updateViewLink(Uri uri) {
+    setState(() {
+      deeplinkUri = uri;
+    });
+  }
   @override
   void dispose() {
     _adapterStateStateSubscription.cancel();
@@ -90,3 +122,4 @@ class BluetoothAdapterStateObserver extends NavigatorObserver {
     _adapterStateSubscription = null;
   }
 }
+

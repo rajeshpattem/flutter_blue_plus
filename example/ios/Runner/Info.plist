@@ -22,14 +22,25 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.rajesh.flutterBluePlusExample</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>bledevices</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>We need BT access because it's a BT App.</string>
+	<string>We need BT access because it&apos;s a BT App.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>We need BT access because it's a BT App.</string>
+	<string>We need BT access because it&apos;s a BT App.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

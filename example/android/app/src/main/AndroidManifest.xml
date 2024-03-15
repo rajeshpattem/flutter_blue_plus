@@ -16,6 +16,7 @@
  
      <!-- legacy for Android 9 or lower -->
      <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
 
      <application
@@ -41,6 +42,12 @@
             <intent-filter>
                  <action android:name="android.intent.action.MAIN"/>
                  <category android:name="android.intent.category.LAUNCHER"/>
+             </intent-filter>
+             <intent-filter>
+                 <data android:scheme="bledevices" android:host="bleconnect"/>
+                 <action android:name="android.intent.action.VIEW" />
+                 <category android:name="android.intent.category.DEFAULT" />
+                 <category android:name="android.intent.category.BROWSABLE" />
              </intent-filter>
          </activity>
          <!-- Don't delete the meta-data below.
